@@ -1,4 +1,5 @@
 import React,{useState} from "react"
+import Icon from "../Icon/Icon"
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -6,9 +7,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Button, Row, Col, Card, CardBody, Container } from 'reactstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
+let arr = new Array(9).fill("")
 const Tic=()=>{
-    let arr = new Array(9).fill("")
+    
     let [winner_message, setWinnerMessage] = useState("") 
     let [whose_turn, setWhoseTurn] = useState(true) 
 
@@ -56,7 +57,8 @@ const Tic=()=>{
     }
     // playersMove
     function playersMove(index){
-          if(setWinnerMessage){
+        
+          if(winner_message){
             return toast.error('Game has already got over');
           }
           else if(arr[index] !=""){
@@ -68,6 +70,7 @@ const Tic=()=>{
 
           }
           checkWinner()
+          
     }
 
     return(
@@ -79,13 +82,26 @@ const Tic=()=>{
                      {
                         winner_message? (
                             <div className="text-center">
-                                <h1 className="text-uppercase text-center">Winner is {winner_message}</h1>
-                                <Button color="Sucess" onClick={playAgain}></Button>
+                                <h1 className="text-uppercase text-center">{winner_message}</h1>
+                                <Button onClick={playAgain}>Play Again</Button>
                             </div>
                         ):(
-                            
+                            <h1 className="text-center text-warning"> 
+                                 {whose_turn?"Cross":"Circle"}'s turn
+                            </h1>
                         )
                      }
+                       <div className="grid">
+                                {
+                                   arr.map((value,index)=> (
+                                       <Card onClick={()=>playersMove(index)}>
+                                            <CardBody className="box"> 
+                                                <Icon play_icon={value}/>
+                                            </CardBody>
+                                         </Card>
+                                   ))
+                                }
+                       </div>
                 </Col>
             </Row>
         </Container>
